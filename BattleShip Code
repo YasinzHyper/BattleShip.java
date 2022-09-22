@@ -1,0 +1,193 @@
+import java.util.Scanner;
+
+import javax.lang.model.util.ElementScanner14;
+
+import java.util.Arrays;
+class BattleShip{
+    public static void main(String[] args){
+        System.out.println("Welcome To Battleship!");
+        //Creation of the 2 boards (2d arrays):
+        String[][] board1 = new String[5][5];
+        for(int row=0; row<5; row ++){
+            for(int col=0; col<5; col++){
+                board1[row][col] = "-";
+            }  
+        } 
+        String[][] board2 = new String[5][5];
+        for(int row=0; row<5; row ++){
+            for(int col=0; col<5; col++){
+                board2[row][col] = "-";
+            }   
+        } 
+        //input the location of the ships:
+        Scanner input = new Scanner(System.in);
+        for(int i=1; i<=2; i++){
+            System.out.println("\nPLAYER " + i + " Enter your Ship's coordinates(row column) : " );
+            for(int k=1; k<=5;k++){
+                System.out.println("Enter Ship " + k + " location:");
+                int x = input.nextInt();
+                int y = input.nextInt();
+                if(x>4 || y>4){
+                    System.out.println("Invalid Position!");
+                    k -= 1;
+                    continue;
+                }
+                if(i==1){
+                    if((x<5)&&(y<5)&&(board1[x][y].equals("-")))
+                    board1[x][y] = "@";
+                    else if(board1[x][y].equals("@")){
+                    System.out.println("Position is already occupied!");
+                    k = k-1;
+                    continue;
+                    }
+                    if(k==5){
+                        // System.out.println(Arrays.deepToString(board1)); 
+                        //printing the board after each player's input:
+                        System.out.println("  0 1 2 3 4");
+                        for(int r=0;r<5;r++){
+                            System.out.print(r + " ");
+                            for(int c=0;c<5;c++){
+                                System.out.print(board1[r][c]+" ");
+                                if(c==4)
+                                System.out.print("\n");
+                            }
+                         }
+                        
+                    }
+                    }
+                    
+                if(i==2){
+                    if((x<5)&&(y<5)&&(board2[x][y].equals("-")))
+                    board2[x][y] = "@";
+                    else if(board2[x][y].equals("@")){
+                    System.out.println("Position is already occupied!");
+                    k = k-1;
+                    continue;
+                    }
+                    /*else{
+                        System.out.println("Invalid Position!");
+                        k -= 1;
+                        continue;
+                    }*/
+                if(k==5){
+                    System.out.println("  0 1 2 3 4");
+                    for(int r=0;r<5;r++){
+                        System.out.print(r + " ");
+                        for(int c=0;c<5;c++){
+                            System.out.print(board2[r][c]+" ");
+                            if(c==4)
+                            System.out.print("\n");
+                        }
+                     }
+                    
+                }
+                }
+                
+            }
+        }
+        //End of input
+
+        //Attack Positions:(Create 2 more arrays containing target history):
+        //a_board1, a_board2
+        String[][] a_board1 = new String[5][5];
+        for(int row=0; row<5; row ++){
+            for(int col=0; col<5; col++){
+                a_board1[row][col] = "-";
+            }   
+        } 
+        String[][] a_board2 = new String[5][5];
+        for(int row=0; row<5; row ++){
+            for(int col=0; col<5; col++){
+                a_board2[row][col] = "-";
+            }   
+        } 
+        //end of attack board creation
+
+        //input attack target:
+        int player1_points = 0;
+        int player2_points = 0;
+        while(player1_points<5 || player2_points<5){
+        for(int player=1; player<3; player++){
+            System.out.println("\nPlayer " + player + " Enter hit target coordinates (row column) : ");
+            int x = input.nextInt();
+            int y = input.nextInt(); 
+            if(x>4 || y>4){
+                System.out.println("Invalid input! ");
+                player -= 1;
+                continue;
+            }
+            if (player1_points==5 || player2_points==5)
+            break;
+            if(player==1){
+                if((a_board1[x][y].equals("-")) && (board2[x][y].equals("-")) ){
+                    a_board1[x][y]="O";
+                    System.out.println("\nPLAYER "+ player + " missed!");
+                }
+                else if((a_board1[x][y].equals("O"))||(a_board1[x][y].equals("X"))){
+                    System.out.println("You already fired upon this spot! Choose different coordinates ");
+                    player -= 1;
+                    continue;
+                }
+                else{
+                    a_board1[x][y]="X";
+                    player1_points += 1;
+                    System.out.println("PLAYER 1 hit PLAYER 2's Ship! \n");
+                }
+                
+                System.out.println("  0 1 2 3 4");
+                for(int r=0;r<5;r++){
+                    System.out.print(r + " ");
+                    for(int c=0;c<5;c++){
+                        System.out.print(a_board1[r][c]+" ");
+                        if(c==4)
+                        System.out.print("\n");
+                    }
+                 }
+                 if (player1_points==5 || player2_points==5)
+                 break;
+
+            }
+            if(player==2){
+                if((a_board2[x][y].equals("-")) && (board1[x][y].equals("-")) ){
+                    a_board2[x][y]="O";
+                    System.out.println("PLAYER "+ player + " missed! \n");
+                }
+                else if((a_board2[x][y].equals("O"))||(a_board2[x][y].equals("X"))){
+                    System.out.println("You already fired upon this spot! Choose different coordinates ");
+                    player -= 1;
+                    continue;
+                }
+                else{
+                    a_board2[x][y]="X";
+                    player2_points += 1;
+                    System.out.println("PLAYER 2 hit PLAYER 1's Ship! \n");
+                }
+                
+                System.out.println("  0 1 2 3 4");
+                for(int r=0;r<5;r++){
+                    System.out.print(r + " ");
+                    for(int c=0;c<5;c++){
+                        System.out.print(a_board2[r][c]+" ");
+                        if(c==4)
+                        System.out.print("\n");
+                    }
+                 }
+                 if (player1_points==5 || player2_points==5)
+                 break;
+            }
+
+            
+        }
+        if (player1_points==5 || player2_points==5)
+            break;
+    } //end of while loop
+
+    //winner determination:
+    if(player1_points==5)
+    System.out.println("PLAYER 1 WINS!");
+    else 
+    System.out.println("PLAYER 2 WINS!");
+    
+    }
+
+    } 
